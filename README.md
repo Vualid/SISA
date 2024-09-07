@@ -410,3 +410,62 @@ timedatectl
 ```
 timedatectl set-timezone Europe/Moscow
 ```
+
+
+
+Настройка OpenvSwitch
+
+```
+systemctl enable --now openvswitch
+```
+Включаем и добавляем OpenvSwitch в автозагрузку
+```
+systemctl status openvswitch
+```
+Проверяем работоспособность OpenvSwitch
+```
+ovs-vsctl show
+```
+Вывод информации о системе коммутации
+```
+ovs-vsctl add-br <ИМЯ SW>
+```
+Добавление виртуального коммутатора. Автоматически
+создается интерфейс с аналогичным именем
+```
+ovs-vsctl add-port <ИМЯ SW> <ИМЯ ПОРТА>
+```
+
+Добавление порта в коммутатор (порт должен быть
+включен)
+```
+ovs-vsctl add-port <ИМЯ SW> <ИМЯ ВИРТУАЛЬНОГО ПОРТА>
+```
+Добавление виртуального порта в коммутатор (выйдет
+ошибка, что нет такого порта)
+```
+ovs-vsctl set Interface <ИМЯ ВИРТУАЛЬНОГО ПОРТА> type=internal
+```
+Устанавливаем виртуальному порту тип internal
+
+```
+ovs-vsctl set Port <ИМЯ ПОРТА> tag=<НОМЕР VLAN>
+```
+
+Установить на данном порту номер VLAN
+```
+ovs-vsctl set Port <ИМЯ ПОРТА> trunks=<VLAN1>,<VLAN2>
+```
+Установить на данном порту параметры trunk
+```
+ovs-appctl stp/show
+```
+Вывод информации о службе STP
+```
+ovs-vsctl set Bridge <ИМЯ SW> stp_enable=yes
+
+ovs-vsctl set Bridge ${IFACE} rstp_enable=true other_config:rstp-priority=
+```
+Активация (R)STP
+
+
