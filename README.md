@@ -157,3 +157,164 @@ interface v220
 dhcp-server 1
 exit
 ```
+
+
+
+vESR
+Интерфейсы:
+
+```
+configure
+interface gi1/0/1
+ip address dhcp
+ip firewall disable
+no shutdown
+exit
+interface gi1/0/2
+no shutdown
+exit
+interface gi1/0/2.330
+ip address 192.168.22.1/29
+ip firewall disable
+exit
+object-group network LAN
+ip prefix 192.168.22.0/24
+exit
+nat source
+ruleset MASQUERADE
+to interface gi1/0/1
+rule 10
+match source-address LAN
+action source-nat interface
+enable
+exit
+exit
+exit
+do commit
+do confirm
+```
+Туннель:
+to R-DT:
+
+```
+tunnel gre 1
+ip add 10.10.10.2/30
+local interface local interface gi1/0/1
+remote address 172.16.4.14
+mtu 1400
+ttl 64
+ip firewall disable
+enable
+exit
+```
+to R-HQ:
+```
+tunnel gre 3
+ip add 10.10.12.2/30
+local interface local interface gi1/0/1
+remote address 172.16.5.14
+mtu 1400
+ttl 64
+ip firewall disable
+enable
+exit
+```
+
+
+
+OSPF:
+```
+r-br(config)#router ospf 1
+r-br(config-ospf)#area 0.0.0.0
+r-br(config-ospf-area)#network 10.10.10.0/30
+r-br(config-ospf-area)#network 10.10.12.0/30
+r-br(config-ospf-area)#network 192.168.22.0/29
+r-br(config-ospf-area)#enable
+r-br(config-ospf-area)#exit
+r-br(config-ospf)#enable
+r-br(config-ospf)#exit
+r-br(config)#
+r-br(config-gre)#tunnel gre 1
+r-br(config-gre)#ip ospf instance 1
+r-br(config-gre)#ip ospf
+r-br(config-gre)#exit
+r-br(config)#
+r-br(config)#do commit
+r-br(config)#do confirm
+r-br(config)#tunnel gre 1
+r-br(config-gre)#ip ospf authentication key ascii-text P@ssw0rd
+r-br(config-gre)#ip ospf authentication algorithm cleartext
+tr-br(config-gre)#exit
+r-br(config)#
+r-br(config)#do commit
+r-br(config)#do confirm
+```
+
+
+DHCP:
+```
+ip dhcp-server pool <ИМЯ ПУЛА>
+network <IP АДРЕС СЕТИ>
+address-range <НАЧАЛЬНЫЙ АДРЕС> - <КОНЕЧНЫЙ АДРЕС>
+excluded-address-range <АДРЕС> - <АДРЕС> (уточнить у экспертов)
+default-router <АДРЕС ШЛЮЗА> (который настроен на порту!!!)
+domain-name "<ДОМЕННОЕ ИМЯ>"
+dns-server <АДРЕС DNS 1>, <АДРЕС DNS 2>
+exit
+ip dhcp-server
+```
+
+NTP:
+
+```
+ntp enable
+ntp server 192.168.11.2
+prefer
+minpoll 4
+exit
+clock timezone gmt +3
+do commit
+do confirm
+```
+
+6.      Настроить коммутаторы
+ 
+
+7.      AD (Samba)
+Было:
+```
+echo nameserver 77.88.8.8 > /etc/net/ifaces/enp6s18/resolv.conf
+```
+Нужно:
+```
+echo nameserver 192.168.11.2 > /etc/net/ifaces/enp6s18/resolv.conf
+echo search au.team >> /etc/net/ifaces/enp6s18/resolv.conf
+cat /etc/net/ifaces/enp6s18/resolv.conf
+```
+
+#Обновляем репозитории
+```
+apt-get update
+```
+
+
+#Устанавливаем требуемые пакеты
+```
+apt-get install bind
+apt-get install bind-utils
+apt-get install task-samba-dc
+ ```
+ 
+ #Меняем имя на короткое
+
+``` 
+hostnamectl set-hostname srv1-hq
+#Отключаем chroot:
+control bind-chroot disabled
+```
+
+#Отключаем KRB5RCACHETYPE
+
+```
+vim /etc/sysconfig/bind
+```
