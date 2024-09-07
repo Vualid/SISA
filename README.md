@@ -94,7 +94,12 @@ ip tunnel 172.16.5.14 172.16.6.2 mode gre
 ip ospf authentication
 ip ospf authentication-key P@ssw0rd
 exit
+```
+
 R-HQ - R-DT:
+
+
+```
 interface tunnel.2
 ip add 10.10.11.2/30
 ip mtu 1400
@@ -118,7 +123,10 @@ r-dt(config-router)#passive-interface default
 r-dt(config-router)#no passive-interface tunnel.1
 r-dt(config-router)#no passive-interface tunnel.2
 r-dt(config-router)#exit
+```
+
 R-HQ:
+```
 r-dt(config)#router ospf 1
 r-dt(config-router)#network 10.10.11.0/30 area 0.0.0.0
 r-dt(config-router)#network 10.10.12.0/30 area 0.0.0.0
@@ -129,7 +137,10 @@ r-dt(config-router)#passive-interface default
 r-dt(config-router)#no passive-interface tunnel.2
 r-dt(config-router)#no passive-interface tunnel.3
 r-dt(config-router)#exit
+```
+
 NTP:
+```
 ntp server 192.168.11.2
 ntp timezone utc+3
 DHCP:
