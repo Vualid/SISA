@@ -12,12 +12,15 @@ SW-DT
 1.      Настроить хостнеймы
 Настраивать хостнейм вместе с доменом (как в таблице)
 На Линукс:
+```
  hostnamectl set-hostname имя.домен
+```
 
-
+```
 На vESR:
 hostname *имя*
 domain name *домен*
 На EcoRouter
 hostname *имя*
 ip domain-name *домен*
+```
