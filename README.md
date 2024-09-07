@@ -318,3 +318,70 @@ control bind-chroot disabled
 ```
 vim /etc/sysconfig/bind
 ```
+
+
+1.      NTP
+ NTP:
+
+```
+vim /etc/chrony.con
+```
+
+
+![image](https://github.com/user-attachments/assets/be350bdf-15d5-4305-9ccd-368212b392c4)
+
+
+```
+systemctl restart chronyd
+systemctl status chronyd
+#Проверяем с каким сервером
+синхронизировалось время
+chronyc tracking
+#Проверяем часовой пояс
+timedatectl
+#Если часовой пояс отличается от московского
+timedatectl set-timezone Europe/Moscow
+```
+
+Настройка клиента сервера времени на ALT на базе chrony
+
+
+#Редактируем конфигурационный файл
+
+```
+vim /etc/chrony.conf
+```
+
+
+![image](https://github.com/user-attachments/assets/a8a33d2b-5541-4c15-8f19-e4a244451c63)
+
+
+#Перезапускаем службу chronyd
+systemctl restart chronyd
+#Проверяем статус служб chronyd
+systemctl status chronyd
+#Проверяем с каким сервером
+синхронизировалось время
+```
+chronyc tracking
+```
+
+#Проверяем часовой пояс
+```
+timedatectl
+```
+
+#Если часовой пояс отличается от московского
+```
+timedatectl set-timezone Europe/Moscow
+```
+
+RedOS
+#Редактируем конфигурационный файл
+```
+vim /etc/chrony.conf
+```
+
+![image](https://github.com/user-attachments/assets/326d7ca2-d519-47e4-b838-0407914e1a91)
+
+
