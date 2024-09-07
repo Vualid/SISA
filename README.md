@@ -385,3 +385,28 @@ vim /etc/chrony.conf
 ![image](https://github.com/user-attachments/assets/326d7ca2-d519-47e4-b838-0407914e1a91)
 
 
+
+#Перезапускаем службу chronyd
+```
+systemctl restart chronyd
+```
+#Проверяем статус служб chronyd
+
+```
+systemctl status chronyd
+```
+#Проверяем с каким сервером
+синхронизировалось время
+
+```
+chronyc tracking
+```
+#Проверяем часовой пояс
+```
+timedatectl
+```
+#Если часовой пояс отличается от московского
+
+```
+timedatectl set-timezone Europe/Moscow
+```
