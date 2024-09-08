@@ -469,3 +469,49 @@ ovs-vsctl set Bridge ${IFACE} rstp_enable=true other_config:rstp-priority=
 Активация (R)STP
 
 
+
+
+
+DOCKER
+#Установка Docker и Docker-compose
+```
+dnf install docker-ce
+dnf install docker-ce-cli
+dnf install docker-compose
+```
+#Включаем и добавляем службу в автозагрузки
+```
+systemctl enable docker --now
+```
+#Прверяем статус службу
+```
+systemctl status docker
+usermod -aG docker <ИМЯ_ПОЛЬЗОВАТЕЛЯ>
+
+docker run -d -p 5000:5000 --restart=always --name DockerRegistry registry:2
+```
+#Пишем Dockerfile для приложения web.
+
+```
+vi Dockerfile
+```
+#Развертываем приложение NGINX на базе Alpine
+```
+FROM nginx:alpine
+#Заменяем дефолтную страницу nginx своей
+RUN rm -rf /usr/share/nginx/html/*
+COPY ./index.html /usr/share/nginx/html
+#Добавляем конфигурационный файл для нашего web приложения
+COPY ./web.conf /etc/nginx/conf.d/web.conf
+#Указываем на необходимость открыть порт
+EXPOSE 80
+#Переводит Nginx «на передний план» (если этого не сделать, контейнер остановится сразу после запуска)
+ENTRYPOINT ["nginx", "-g", "daemon off;"]
+```
+
+```
+vi index.html
+```
+
+![image](https://github.com/user-attachments/assets/29fe4a10-b963-4f3f-a62a-d98fedab56e3)
+
