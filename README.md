@@ -691,4 +691,8 @@ sudo nano /etc/hosts
 Теперь вы должны иметь полностью настроенный мониторинг с использованием NodeExporter, Prometheus и Grafana. Вы сможете просматривать метрики и отображать их на Dashboard в Grafana, а также получать доступ к интерфейсу Grafana по имени monitoring.au.team.
 
 
+https://docs.google.com/document/d/1rmdDhMv-Ufn_6jkP2p3azbprRBSh5zXlTSKYQoOymeY/edit?pli=1
+
+https://disk.yandex.ru/d/14gvyGRWrfulfw
+
 
