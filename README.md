@@ -644,6 +644,11 @@ services:
     restart: always
 ```
 
+vim /var/lib/docker/volumes/root_prom-configs/_data/prometheus.yml
+
+![image](https://github.com/user-attachments/assets/cbd057c2-4061-40c0-9b91-9c29d1ead043)
+
+
 Сохраните и закройте файл.
 
 Шаг 2: Запуск контейнеров NodeExporter, Prometheus и Grafana
