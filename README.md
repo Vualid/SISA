@@ -514,4 +514,100 @@ vi index.html
 ```
 
 ![image](https://github.com/user-attachments/assets/29fe4a10-b963-4f3f-a62a-d98fedab56e3)
+```
+vi web.conf
+```
+
+![image](https://github.com/user-attachments/assets/20acf607-6828-46c6-a96b-f3f005ccec23)
+
+
+#Выполняем сборку образа
+```
+docker build -t web .
+
+
+#Проверяем наличие собранного образа
+
+docker images
+
+#Присваиваем образу тег для размещения его в локальном Docker Registry
+docker tag web localhost:5000/web:1.0
+#Загружаем образ в локальный Docker Registry:
+docker push localhost:5000/web:1.0
+#Проверяем наличие образа локальном Docker Registry
+docker images
+```
+
+```
+#Удаляем образы localhost:5000/web:1.0 и web
+docker rmi web
+docker rmi localhost:5000/web:1.0
+#Проверяем наличие образов
+docker images
+
+```
+```
+
+#Загружаем образ приложения web из локального Docker Registry:
+docker pull localhost:5000/web:1.0
+#Проверяем наличие образов
+docker images
+
+```
+
+```
+#Запускаем приложение web из скаченного образа из локального репозитория
+docker run -d --name web -p 80:80 --restart=always localhost:5000/web:1.0
+#Проверяем, что контейнер запустился
+docker ps -a
+
+```
+
+
+```
+
+Т.к. наше web приложение работает за NAT, необходимо настроить проброс портов на маршрутизаторе (R-DT)
+Задаём правило для проброса порта на R-DT (EcoRouter)
+При обращении на внешний адрес маршрутизатора (172.16.4.14) на порт 80 должен происходить проброс на
+адрес 192.168.33.3 (SRV2-DT) на порт 80 по протоколу tcp
+R-DT(config)#ip nat source static tcp 192.168.33.3 80 172.16.4.14 80
+
+```
+
+ВНИМАНИЕ!
+На CLI необходимо прописать имя www.au.team.ru в файл /etc/hosts
+
+
+![image](https://github.com/user-attachments/assets/79574a9a-4f43-41dd-9dfb-664e933c067b)
+
+
+
+```
+#В домашней директории пользователя создаём файл monitoring.yml
+vim ~/monitoring.yml
+#Содержимое файла monitoring.yml
+
+
+#Выполняем сборку и запуск контейнеров описанных в файле monitoring.yml
+docker-compose -f monitoring.yml up -d
+```
+
+
+```
+#Переходим в браузер http://<IP адрес SRV2-DT>:3000
+#Для доступа в веб-интерфейс Grafana - стандартный логин и пароль "admin"
+#Задаём новый пароль (P@ssw0rd) и подтверждаем его
+```
+
+```
+#Добавляем в Grafana – Prometheus
+1) на главном меню нажимаем Add your first data source
+2) выбираем Prometheus
+3) вводим адрес контейнера с Prometheus
+4) внизу на этой же странице нажимаем Save and Test
+```
+
+
+
+
 
