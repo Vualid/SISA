@@ -1208,6 +1208,7 @@ systemctl status chronyd
 
 
 Настройка OpenvSwitch с помощью Etcnet
+```
 ip add
 cp -r /etc/net/ifaces/enp6s18 /etc/net/ifaces/enp6s19
 cp -r /etc/net/ifaces/enp6s18 /etc/net/ifaces/enp6s20
@@ -1231,7 +1232,7 @@ echo nameserver 77.88.8.8 > /etc/net/ifaces/mgmt/resolv.conf
 systemctl restart network
 ovs-vsctl show
 ovs-appctl stp/show
-
+```
 
 
 ![image](https://github.com/user-attachments/assets/68fbdd5d-70ca-4cdc-b7a8-7fc10ac9ad20)
