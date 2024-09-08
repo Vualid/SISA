@@ -607,7 +607,83 @@ docker-compose -f monitoring.yml up -d
 4) внизу на этой же странице нажимаем Save and Test
 ```
 
+Конечно! Вот полная инструкция для настройки мониторинга с использованием NodeExporter, Prometheus и Grafana с командами:
 
+Шаг 1: Создание файла monitoring.yml для Docker Compose
+
+Откройте терминал на вашей Linux-машине.
+
+Перейдите в домашнюю директорию пользователя:
+
+cd ~
+Создайте файл monitoring.yml с помощью текстового редактора (например, nano):
+
+nano monitoring.yml
+Вставьте следующий код в файл monitoring.yml:
+```
+version: '3'
+services:
+  node-exporter:
+    image: prom/node-exporter
+    ports:
+      - 9100:9100
+    restart: always
+
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    restart: always
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - 3000:3000
+    restart: always
+```
+
+Сохраните и закройте файл.
+
+Шаг 2: Запуск контейнеров NodeExporter, Prometheus и Grafana
+
+В терминале выполните следующую команду для запуска контейнеров:
+```
+docker-compose -f monitoring.yml up -d
+```
+Эта команда запустит контейнеры NodeExporter, Prometheus и Grafana в фоновом режиме.
+
+Дождитесь, пока контейнеры полностью запустятся. Вы можете проверить их статус с помощью команды:
+```
+docker-compose -f monitoring.yml ps
+Убедитесь, что все контейнеры имеют статус "Up".
+```
+Шаг 3: Настройка Dashboard в Grafana
+
+Откройте веб-браузер и перейдите по адресу http://monitoring.au.team:3000 (убедитесь, что у вас настроено соответствующее DNS-разрешение).
+
+Войдите в Grafana с помощью учетных данных по умолчанию (логин: admin, пароль: admin).
+
+Создайте новый Dashboard, нажав на значок плюса (+) в левой панели навигации и выбрав "Dashboard".
+
+Добавьте панели для отображения метрик CPU, памяти и диска, нажав на значок плюса (+) в верхней панели и выбрав "Add Panel".
+
+Настройте запросы Prometheus для получения данных о загрузке CPU, памяти и диска с серверов SRV1-DT, SRV2-DT, SRV3-DT. Для этого в каждой панели выберите "Edit" и настройте соответствующий запрос.
+
+Шаг 4: Доступ к интерфейсу Grafana по имени monitoring.au.team
+
+Откройте файл /etc/hosts с помощью текстового редактора:
+
+sudo nano /etc/hosts
+Добавьте следующую строку в файл, указав IP-адрес вашей Linux-машины:
+```
+<IP-адрес> monitoring.au.team
+Замените <IP-адрес> на фактический IP-адрес вашей машины.
+```
+Сохраните и закройте файл.
+
+Теперь вы должны иметь полностью настроенный мониторинг с использованием NodeExporter, Prometheus и Grafana. Вы сможете просматривать метрики и отображать их на Dashboard в Grafana, а также получать доступ к интерфейсу Grafana по имени monitoring.au.team.
 
 
 
