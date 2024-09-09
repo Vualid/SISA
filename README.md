@@ -1239,3 +1239,81 @@ ovs-appctl stp/show
 
 
 
+
+
+
+
+
+ANSIBLE
+```
+
+---
+- hosts: all
+  gather_facts: true
+
+  tasks:
+
+    - name: Save host info to output file
+      lineinfile:
+        path: /opt/ansible/output.yaml
+        line: "{{ ansible_fqdn }} - {{ ansible_default_ipv4.address }}"
+        mode: 0644
+        create: yes
+      delegate_to: localhost
+
+
+```
+
+
+```
+---
+- hosts: all
+  gather_facts: true
+
+  tasks:
+    - name: Gather FQDN and IP addresses into a list
+      set_fact:
+        host_info: "{{ host_info | default([]) + ['{{ ansible_fqdn }} - {{ ansible_default_ipv4.address }}'] }}"
+      run_once: true
+
+    - name: Save host info to output file
+      copy:
+        content: "{{ host_info | join('\n') }}\n"
+        dest: /opt/ansible/output.yaml
+        mode: 0644
+      delegate_to: localhost
+
+```
+
+
+```
+---
+- hosts: all
+  gather_facts: true
+
+  tasks:
+    - name: Collect FQDN and IP addresses
+      local_action:
+        module: lineinfile
+        path: /opt/ansible/output.yaml
+        line: "{{ ansible_fqdn }} - {{ ansible_default_ipv4.address }}"
+      delegate_to: localhost
+```
+
+```
+---
+- hosts: all
+  gather_facts: true
+
+  tasks:
+
+    - name: Save host info to output file
+      lineinfile:
+        path: /opt/ansible/output.yaml
+        line: "{{ ansible_fqdn }} - {{ ansible_default_ipv4.address }}"
+        mode: 0644
+      delegate_to: localhost
+
+
+```
+
